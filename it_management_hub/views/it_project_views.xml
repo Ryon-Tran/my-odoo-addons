@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_project_form_it_management_hub" model="ir.ui.view">
+            <field name="name">project.project.form.it.management.hub</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_open_gitlab" type="object" 
+                            class="oe_stat_button" icon="fa-gitlab"
+                            invisible="not it_gitlab_url">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">GitLab</span>
+                        </div>
+                    </button>
+                    
+                    <button name="action_open_domain" type="object" 
+                            class="oe_stat_button" icon="fa-globe"
+                            invisible="not it_domain">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Website</span>
+                        </div>
+                    </button>
+                    
+                    <button name="action_open_chatwoot" type="object" 
+                            class="oe_stat_button" icon="fa-comments"
+                            invisible="not it_chatwoot_dashboard_url">
+                        <div class="o_stat_info">
+                            <field name="it_open_support_tickets" widget="statinfo" string="Open"/>
+                            <span class="o_stat_text">Support</span>
+                        </div>
+                    </button>
+                    
+                    <button name="action_purge_cloudflare_cache" type="object" 
+                            class="oe_stat_button" icon="fa-refresh"
+                            invisible="not it_cloudflare_zone_id">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Clear Cache</span>
+                        </div>
+                    </button>
+                </xpath>
+                
+                <xpath expr="//notebook" position="inside">
+                    <page string="🚀 IT System Hub" name="it_system_hub">
+                        <group>
+                            <group string="📊 Current Status" name="status_overview">
+                                <field name="it_pipeline_status" 
+                                       widget="badge" 
+                                       decoration-success="it_pipeline_status == 'success'" 
+                                       decoration-danger="it_pipeline_status == 'failed'"
+                                       decoration-info="it_pipeline_status == 'running'"
+                                       decoration-warning="it_pipeline_status == 'pending'"/>
+                                <field name="it_ssl_status" 
+                                       widget="badge" 
+                                       decoration-success="it_ssl_status == 'active'"
+                                       decoration-danger="it_ssl_status == 'expired'"
+                                       decoration-warning="it_ssl_status in ['expiring_soon', 'none']"/>
+                                <field name="it_ai_risk_level" 
+                                       widget="badge"
+                                       decoration-success="it_ai_risk_level == 'low'"
+                                       decoration-info="it_ai_risk_level == 'medium'"
+                                       decoration-warning="it_ai_risk_level == 'high'"
+                                       decoration-danger="it_ai_risk_level == 'critical'"/>
+                                <field name="it_uptime_percentage" widget="percentage"/>
+                            </group>
+                            
+                            <group string="⏱️ Last Activities" name="last_activities">
+                                <field name="it_last_deployment_date"/>
+                                <field name="it_last_ai_analysis_date"/>
+                                <field name="it_last_cache_purge"/>
+                                <field name="it_last_backup_date"/>
+                            </group>
+                        </group>
+                        
+                        <separator/>
+                        
+                        <notebook>
+                            <page string="🔧 DevOps" name="devops_tab">
+                                <group>
+                                    <group string="GitLab Repository">
+                                        <field name="it_gitlab_url" widget="url" placeholder="https://gitlab.com/your-org/project"/>
+                                        <field name="it_gitlab_project_id" placeholder="12345"/>
+                                        <field name="it_deployment_branch"/>
+                                        <field name="it_deployment_author"/>
+                                    </group>
+                                    <group string="Pipeline Info">
+                                        <field name="it_last_pipeline_id"/>
+                                        <field name="it_last_pipeline_url" widget="url"/>
+                                        <field name="it_last_commit_message" colspan="2"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="🌐 Infrastructure" name="infrastructure_tab">
+                                <group>
+                                    <group string="Domain &amp; Hosting">
+                                        <field name="it_domain" widget="url" placeholder="example.com"/>
+                                        <field name="it_domain_aliases" placeholder="www.example.com&#10;api.example.com"/>
+                                        <field name="it_server_ip"/>
+                                        <field name="it_hosting_provider"/>
+                                    </group>
+                                    <group string="SSL Certificate">
+                                        <field name="it_ssl_expiry_date"/>
+                                        <field name="it_ssl_issuer"/>
+                                        <field name="it_ssl_auto_renew"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group string="Technical Stack">
+                                        <field name="it_framework" placeholder="React, Laravel, Django..."/>
+                                        <field name="it_database"/>
+                                        <field name="it_server_type"/>
+                                        <field name="it_tech_stack" placeholder="Frontend: React + TypeScript&#10;Backend: Node.js + Express&#10;Database: PostgreSQL"/>
+                                    </group>
+                                    <group string="Monitoring">
+                                        <field name="it_monitoring_enabled"/>
+                                        <field name="it_last_downtime"/>
+                                        <field name="it_alert_webhook_url" placeholder="https://hooks.slack.com/..."/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="☁️ Cloudflare" name="cloudflare_tab">
+                                <group>
+                                    <group string="Cloudflare Configuration">
+                                        <field name="it_cloudflare_zone_id" password="True"/>
+                                        <field name="it_cloudflare_status"/>
+                                        <field name="it_cloudflare_plan"/>
+                                    </group>
+                                    <group string="Cache Info">
+                                        <label for="it_last_cache_purge" string="Last Purge"/>
+                                        <div>
+                                            <field name="it_last_cache_purge" class="oe_inline"/>
+                                            <button name="action_purge_cloudflare_cache" 
+                                                    string="Clear Now" 
+                                                    type="object" 
+                                                    class="btn-link"
+                                                    invisible="not it_cloudflare_zone_id"/>
+                                        </div>
+                                    </group>
+                                </group>
+                                <div class="alert alert-info" role="alert" invisible="it_cloudflare_zone_id">
+                                    <p><strong>ℹ️ Cloudflare Setup Required</strong></p>
+                                    <p>Enter your Cloudflare Zone ID to enable automatic cache purging on deployments.</p>
+                                </div>
+                            </page>
+                            
+                            <page string="💬 Support" name="support_tab">
+                                <group>
+                                    <group string="Chatwoot Integration">
+                                        <field name="it_chatwoot_website_token" password="True"/>
+                                        <field name="it_chatwoot_inbox_id"/>
+                                        <field name="it_chatwoot_dashboard_url" widget="url"/>
+                                        <field name="it_support_email" widget="email"/>
+                                    </group>
+                                    <group string="Support Statistics">
+                                        <field name="it_total_support_tickets"/>
+                                        <field name="it_open_support_tickets"/>
+                                    </group>
+                                </group>
+                                <div class="alert alert-warning" role="alert" invisible="it_open_support_tickets == 0">
+                                    <p><strong>⚠️ You have <field name="it_open_support_tickets" class="oe_inline"/> open support tickets!</strong></p>
+                                    <button name="action_open_chatwoot" string="View in Chatwoot" type="object" class="btn btn-primary"/>
+                                </div>
+                            </page>
+                            
+                            <page string="💾 Backup" name="backup_tab">
+                                <group>
+                                    <group string="Backup Configuration">
+                                        <field name="it_backup_enabled"/>
+                                        <field name="it_backup_frequency" invisible="not it_backup_enabled"/>
+                                        <field name="it_backup_location" invisible="not it_backup_enabled" placeholder="s3://bucket-name/backups"/>
+                                    </group>
+                                    <group string="Backup Status">
+                                        <field name="it_last_backup_date"/>
+                                    </group>
+                                </group>
+                                <div class="alert alert-danger" role="alert" invisible="it_backup_enabled">
+                                    <p><strong>⚠️ Backup is NOT enabled for this project!</strong></p>
+                                    <p>Enable automatic backups to protect your data.</p>
+                                </div>
+                            </page>
+                        </notebook>
+                        
+                        <separator string="🤖 AI Analysis &amp; Insights"/>
+                        <field name="it_ai_analysis" widget="html" nolabel="1" placeholder="AI analysis will appear here after CI/CD pipeline runs..."/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_project_tree_it_management_hub" model="ir.ui.view">
+            <field name="name">project.project.tree.it.management.hub</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="it_domain" optional="show"/>
+                    <field name="it_pipeline_status" widget="badge" 
+                           decoration-success="it_pipeline_status == 'success'" 
+                           decoration-danger="it_pipeline_status == 'failed'"
+                           decoration-info="it_pipeline_status == 'running'"
+                           optional="show"/>
+                    <field name="it_ssl_status" widget="badge" 
+                           decoration-success="it_ssl_status == 'active'"
+                           decoration-danger="it_ssl_status == 'expired'"
+                           decoration-warning="it_ssl_status == 'expiring_soon'"
+                           optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
