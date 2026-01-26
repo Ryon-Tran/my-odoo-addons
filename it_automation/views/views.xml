@@ -1,75 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- List View -->
     <record id="view_it_service_request_list" model="ir.ui.view">
         <field name="name">it.service.request.list</field>
         <field name="model">it.service.request</field>
         <field name="arch" type="xml">
-            <list decoration-info="state == 'approved'" decoration-success="state == 'done'" decoration-danger="state == 'failed'">
+            <list decoration-muted="state == 'draft'"
+                decoration-warning="state == 'processing'"
+                decoration-success="state == 'done'"
+                decoration-danger="state == 'failed'">
                 <field name="name"/>
                 <field name="request_type"/>
+                <field name="employee_email"/>
                 <field name="create_date" string="Ngày tạo"/>
-                <field name="state" widget="badge" decoration-info="state == 'approved'" decoration-success="state == 'done'"/>
+                <field name="state" widget="badge"
+                    decoration-muted="state == 'draft'"
+                    decoration-warning="state == 'processing'"
+                    decoration-success="state == 'done'"
+                    decoration-danger="state == 'failed'"/>
             </list>
         </field>
     </record>
-
+    <!-- Form View -->
     <record id="view_it_service_request_form" model="ir.ui.view">
         <field name="name">it.service.request.form</field>
         <field name="model">it.service.request</field>
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_approve_and_send" string="Duyệt &amp; Chạy Automation" 
-                            type="object" class="oe_highlight" 
-                            invisible="state != 'draft'"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,done"/>
+                    <button name="action_approve_and_send"
+                            string="Duyệt &amp; Chạy Automation"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state not in ['draft', 'failed']"/>
+                    <button name="action_reset_to_draft"
+                            string="Đặt lại"
+                            type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,processing,done"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
                         <label for="name" string="Tiêu đề yêu cầu"/>
-                        <h1><field name="name" placeholder="Ví dụ: Cấp quyền nhân viên A"/></h1>
+                        <h1>
+                            <field name="name" placeholder="Ví dụ: Cấp quyền nhân viên A"/>
+                        </h1>
                     </div>
                     <group>
                         <group>
                             <field name="request_type" widget="radio"/>
                         </group>
+                        <group>
+                            <field name="create_date" readonly="1"/>
+                        </group>
                     </group>
-
-                    <group string="Thông tin nhân sự" invisible="request_type not in ['onboarding', 'offboarding', 'temp_access']">
+                    <group string="Thông tin nhân sự"
+                        invisible="request_type not in ['onboarding', 'temp_access']">
                         <field name="employee_name"/>
-                        <field name="employee_email"/>
+                        <field name="employee_email" required="request_type in ['onboarding', 'temp_access']"/>
                         <field name="gitlab_project_id"/>
                     </group>
-
-                    <group string="Thông tin hạ tầng" invisible="request_type != 'subdomain'">
-                        <field name="subdomain_name"/>
+                    <group string="Thông tin hạ tầng"
+                        invisible="request_type != 'subdomain'">
+                        <field name="subdomain_name" required="request_type == 'subdomain'"/>
                         <field name="target_ip"/>
                     </group>
-
                     <notebook>
                         <page string="Nhật ký hệ thống">
-                            <field name="response_log" readonly="1"/>
+                            <field name="response_log" readonly="1" nolabel="1"/>
                         </page>
                     </notebook>
                 </sheet>
             </form>
         </field>
     </record>
-
+    <!-- Action -->
     <record id="action_it_service_request" model="ir.actions.act_window">
         <field name="name">Yêu cầu IT</field>
         <field name="res_model">it.service.request</field>
         <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tạo yêu cầu IT đầu tiên
+            </p>
+            <p>
+                Click vào nút "Tạo" để thêm yêu cầu mới
+            </p>
+        </field>
     </record>
-
-    <menuitem id="menu_it_root" 
-              name="IT Automation" 
-              web_icon="it_automation,static/description/icon.png"
-              sequence="10"/>
-
-    <menuitem id="menu_it_request" 
-              name="Danh sách yêu cầu" 
-              parent="menu_it_root" 
-              action="action_it_service_request"
-              sequence="10"/>
+    <!-- Menu -->
+    <menuitem id="menu_it_root"
+            name="IT Automation"
+            sequence="10"/>
+    <menuitem id="menu_it_request"
+            name="Danh sách yêu cầu"
+            parent="menu_it_root"
+            action="action_it_service_request"
+            sequence="10"/>
 </odoo>
