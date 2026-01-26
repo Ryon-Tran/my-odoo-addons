@@ -46,8 +46,9 @@ class ITServiceRequest(models.Model):
         # Cập nhật trạng thái
         self.state = 'processing'
         
-        # Chuẩn bị data
-        webhook_url = "http://localhost:5678/webhook/it-request"
+        # Lấy webhook_url từ System Parameters, nếu không có thì dùng mặc định
+        webhook_url = self.env['ir.config_parameter'].sudo().get_param(
+            'it_automation.webhook_url', 'http://localhost:5678/webhook/it-request')
         payload = {
             "name": self.name,
             "type": self.request_type,

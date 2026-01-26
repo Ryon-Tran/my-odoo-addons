@@ -32,10 +32,12 @@
                             string="Duyệt &amp; Chạy Automation"
                             type="object"
                             class="oe_highlight"
+                            groups="base.group_system"
                             invisible="state not in ['draft', 'failed']"/>
                     <button name="action_reset_to_draft"
                             string="Đặt lại"
                             type="object"
+                            groups="base.group_erp_manager"
                             invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar"
                         statusbar_visible="draft,processing,done"/>
