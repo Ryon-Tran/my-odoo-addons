@@ -43,7 +43,7 @@
                 </xpath>
                 
                 <xpath expr="//notebook" position="inside">
-                    <page string="IT System Hub" name="it_system_hub">
+                    <page string="IT System Hubs" name="it_system_hub">
                         <group>
                             <group string="Current Status" name="status_overview">
                                 <field name="it_pipeline_status" 
