@@ -43,9 +43,9 @@
                 </xpath>
                 
                 <xpath expr="//notebook" position="inside">
-                    <page string="🚀 IT System Hub" name="it_system_hub">
+                    <page string="IT System Hub" name="it_system_hub">
                         <group>
-                            <group string="📊 Current Status" name="status_overview">
+                            <group string="Current Status" name="status_overview">
                                 <field name="it_pipeline_status" 
                                        widget="badge" 
                                        decoration-success="it_pipeline_status == 'success'" 
@@ -66,7 +66,7 @@
                                 <field name="it_uptime_percentage" widget="percentage"/>
                             </group>
                             
-                            <group string="⏱️ Last Activities" name="last_activities">
+                            <group string="⏱Last Activities" name="last_activities">
                                 <field name="it_last_deployment_date"/>
                                 <field name="it_last_ai_analysis_date"/>
                                 <field name="it_last_cache_purge"/>
@@ -77,7 +77,7 @@
                         <separator/>
                         
                         <notebook>
-                            <page string="🔧 DevOps" name="devops_tab">
+                            <page string="DevOps" name="devops_tab">
                                 <group>
                                     <group string="GitLab Repository">
                                         <field name="it_gitlab_url" widget="url" placeholder="https://gitlab.com/your-org/project"/>
@@ -93,7 +93,7 @@
                                 </group>
                             </page>
                             
-                            <page string="🌐 Infrastructure" name="infrastructure_tab">
+                            <page string="Infrastructure" name="infrastructure_tab">
                                 <group>
                                     <group string="Domain &amp; Hosting">
                                         <field name="it_domain" widget="url" placeholder="example.com"/>
@@ -122,7 +122,7 @@
                                 </group>
                             </page>
                             
-                            <page string="☁️ Cloudflare" name="cloudflare_tab">
+                            <page string="Cloudflare" name="cloudflare_tab">
                                 <group>
                                     <group string="Cloudflare Configuration">
                                         <field name="it_cloudflare_zone_id" password="True"/>
@@ -142,12 +142,12 @@
                                     </group>
                                 </group>
                                 <div class="alert alert-info" role="alert" invisible="it_cloudflare_zone_id">
-                                    <p><strong>ℹ️ Cloudflare Setup Required</strong></p>
+                                    <p><strong>Cloudflare Setup Required</strong></p>
                                     <p>Enter your Cloudflare Zone ID to enable automatic cache purging on deployments.</p>
                                 </div>
                             </page>
                             
-                            <page string="💬 Support" name="support_tab">
+                            <page string="Support" name="support_tab">
                                 <group>
                                     <group string="Chatwoot Integration">
                                         <field name="it_chatwoot_website_token" password="True"/>
@@ -161,12 +161,12 @@
                                     </group>
                                 </group>
                                 <div class="alert alert-warning" role="alert" invisible="it_open_support_tickets == 0">
-                                    <p><strong>⚠️ You have <field name="it_open_support_tickets" class="oe_inline"/> open support tickets!</strong></p>
+                                    <p><strong>You have <field name="it_open_support_tickets" class="oe_inline"/> open support tickets!</strong></p>
                                     <button name="action_open_chatwoot" string="View in Chatwoot" type="object" class="btn btn-primary"/>
                                 </div>
                             </page>
                             
-                            <page string="💾 Backup" name="backup_tab">
+                            <page string="Backup" name="backup_tab">
                                 <group>
                                     <group string="Backup Configuration">
                                         <field name="it_backup_enabled"/>
@@ -178,13 +178,13 @@
                                     </group>
                                 </group>
                                 <div class="alert alert-danger" role="alert" invisible="it_backup_enabled">
-                                    <p><strong>⚠️ Backup is NOT enabled for this project!</strong></p>
+                                    <p><strong>Backup is NOT enabled for this project!</strong></p>
                                     <p>Enable automatic backups to protect your data.</p>
                                 </div>
                             </page>
                         </notebook>
                         
-                        <separator string="🤖 AI Analysis &amp; Insights"/>
+                        <separator string="AI Analysis &amp; Insights"/>
                         <field name="it_ai_analysis" widget="html" nolabel="1" placeholder="AI analysis will appear here after CI/CD pipeline runs..."/>
                     </page>
                 </xpath>
