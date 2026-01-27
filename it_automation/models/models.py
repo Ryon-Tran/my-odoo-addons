@@ -98,13 +98,11 @@ class ITServiceRequest(models.Model):
             )
             self.response_log = log_message
 
-            # Check response
-            if response.status_code in [200, 201]:
-                self.state = 'done'
-                _logger.info(f"IT Request {self.name} processed successfully")
-            else:
+            # Chỉ chuyển sang 'failed' nếu lỗi, còn lại giữ 'processing' để chờ callback
+            if response.status_code not in [200, 201]:
                 self.state = 'failed'
                 raise UserError(f'Webhook trả về lỗi: {response.status_code}')
+            _logger.info(f"IT Request {self.name} sent to n8n, waiting for callback...")
 
         except requests.exceptions.Timeout:
             self.state = 'failed'
