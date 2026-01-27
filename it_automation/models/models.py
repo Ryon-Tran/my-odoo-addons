@@ -50,6 +50,8 @@ class ITServiceRequest(models.Model):
         Duyệt và gửi request đến n8n webhook
         """
         self.ensure_one()
+        if self.state == 'processing':
+            raise UserError('Yêu cầu này đang được xử lý, vui lòng không gửi lại!')
 
         # Validation
         if self.request_type in ['onboarding', 'temp_access'] and not self.employee_email:
