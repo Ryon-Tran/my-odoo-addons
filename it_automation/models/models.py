@@ -21,7 +21,10 @@ class ITServiceRequest(models.Model):
         [
             ('onboarding', 'Nhân viên mới'),
             ('subdomain', 'Cấp Subdomain'),
-            ('temp_access', 'Quyền tạm thời')
+            ('temp_access', 'Quyền tạm thời'),
+            ('clear_cache', 'Xóa Cache CDN (Cloudflare)'),
+            ('reset_pwd', 'Cấp lại mật khẩu hệ thống'),
+            ('offboarding', 'Thu hồi tài nguyên')
         ],
         string="Loại yêu cầu",
         default='onboarding',
@@ -61,7 +64,7 @@ class ITServiceRequest(models.Model):
             raise UserError('Yêu cầu này đang được xử lý, vui lòng không gửi lại!')
 
         # Validation
-        if self.request_type in ['onboarding', 'temp_access'] and not self.employee_email:
+        if self.request_type in ['onboarding', 'temp_access', 'reset_pwd'] and not self.employee_email:
             raise UserError('Vui lòng nhập email nhân viên!')
         if self.request_type == 'subdomain' and not self.subdomain_name:
             raise UserError('Vui lòng nhập tên subdomain!')
