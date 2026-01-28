@@ -49,12 +49,13 @@
                             <field name="name" placeholder="Ví dụ: Cấp quyền nhân viên A"/>
                         </h1>
                     </div>
-                    <group>
-                        <group>
-                            <field name="request_type" widget="radio"/>
+                    <group col="2">
+                        <group string="Loại yêu cầu">
+                            <field name="request_type" widget="radio" nolabel="1"/>
                         </group>
-                        <group>
-                            <field name="create_date" readonly="1"/>
+                        <group string="Thông tin khởi tạo">
+                            <field name="create_date" string="Created on" readonly="1"/>
+                            <field name="create_uid" string="Người thực hiện" readonly="1" widget="many2one_avatar_user"/>
                         </group>
                     </group>
                     <group string="Thông tin nhân sự"
@@ -62,6 +63,10 @@
                         <field name="employee_name"/>
                         <field name="employee_email" required="request_type in ['onboarding', 'temp_access']"/>
                         <field name="gitlab_project_id"/>
+                        <field name="duration"
+                                string="Thời hạn cấp"
+                            invisible="request_type != 'temp_access'"
+                            required="request_type == 'temp_access'"/>
                     </group>
                     <group string="Thông tin hạ tầng"
                         invisible="request_type != 'subdomain'">

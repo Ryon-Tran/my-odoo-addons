@@ -33,6 +33,13 @@ class ITServiceRequest(models.Model):
     gitlab_project_id = fields.Char(string="GitLab Project ID")
     target_ip = fields.Char(string="Target IP")
     response_log = fields.Text(string="Response Log", readonly=True)
+    duration = fields.Selection([
+        ('1', '1 Giờ'),
+        ('4', '4 Giờ'),
+        ('8', '8 Giờ (1 Ca)'),
+        ('24', '24 Giờ (1 Ngày)'),
+        ('72', '72 Giờ (3 Ngày)'),
+    ], string="Thời hạn cấp", default='1')
     state = fields.Selection(
         [
             ('draft', 'Nháp'),
@@ -71,9 +78,12 @@ class ITServiceRequest(models.Model):
             "request_id": self.id,
             "name": self.name,
             "type": self.request_type,
+            "duration": self.duration if self.request_type == 'temp_access' else None,
             "email": self.employee_email,
             "employee_name": self.employee_name,
             "subdomain": self.subdomain_name,
+            "created_by_id": self.create_uid.id,      
+            "created_by_name": self.create_uid.name,  
             "target_ip": self.target_ip,
             "gitlab_project_id": self.gitlab_project_id
         }
